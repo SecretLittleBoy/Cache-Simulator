@@ -1,7 +1,3 @@
-/*
- * main.c
- */
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -10,20 +6,14 @@
 
 static FILE *traceFile;
 
-int main(argc, argv)
-int argc;
-char **argv;
-{
+int main(int argc, char **argv) {
     parse_args(argc, argv);
     init_cache();
     play_trace(traceFile);
     print_stats();
 }
 
-/************************************************************/
-void parse_args(argc, argv) int argc;
-char **argv;
-{
+void parse_args(int argc, char **argv) {
     int arg_index, i, value;
 
     if (argc < 2) {
@@ -122,12 +112,8 @@ char **argv;
 
     return;
 }
-/************************************************************/
 
-/************************************************************/
-void play_trace(inFile)
-    FILE *inFile;
-{
+void play_trace(FILE *inFile) {
     unsigned addr, data, access_type;
     int num_inst;
 
@@ -152,13 +138,8 @@ void play_trace(inFile)
 
     flush();
 }
-/************************************************************/
 
-/************************************************************/
-int read_trace_element(inFile, access_type, addr)
-FILE *inFile;
-unsigned *access_type, *addr;
-{
+int read_trace_element(FILE *inFile, unsigned *access_type, unsigned *addr) {
     int result;
     char c;
 
@@ -173,4 +154,3 @@ unsigned *access_type, *addr;
     else
         return (0);
 }
-/************************************************************/
