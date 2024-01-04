@@ -62,5 +62,3 @@ void delete(Pcache_line *head, Pcache_line *tail, Pcache_line item);
 void insert(Pcache_line *head, Pcache_line *tail, Pcache_line item);
 void dump_settings(); // print cache settings
 void print_stats();
-
-

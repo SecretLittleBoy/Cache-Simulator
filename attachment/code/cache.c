@@ -64,17 +64,14 @@ void set_cache_param(int param, int value) {
 }
 
 void init_cache() {
-
     /* initialize the cache, and cache statistics data structures */
 }
 
 void perform_access(unsigned addr, unsigned access_type) {
-
     /* handle an access to the cache */
 }
 
 void flush() {
-
     /* flush the cache */
 }
  

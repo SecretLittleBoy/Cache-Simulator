@@ -132,8 +132,7 @@ void play_trace(FILE *inFile) {
 
 //return 1 if is end of file, 0 otherwise
 int read_trace_element(FILE *inFile, unsigned *access_type, unsigned *addr) {
-    char c;
-
+    char c;//discard all chars
     int result = fscanf(inFile, "%u %x%c", access_type, addr, &c);
     while (c != '\n') {
         result = fscanf(inFile, "%c", &c);
