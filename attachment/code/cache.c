@@ -106,7 +106,8 @@ void insert(Pcache_line *head, Pcache_line *tail, Pcache_line item) {
 
     *head = item;
 }
- 
+
+// print cache settings
 void dump_settings() {
     printf("*** CACHE SETTINGS ***\n");
     if (cache_split) {

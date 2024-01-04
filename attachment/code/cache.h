@@ -60,7 +60,7 @@ void perform_access(unsigned addr, unsigned access_type);
 void flush();
 void delete(Pcache_line *head, Pcache_line *tail, Pcache_line item);
 void insert(Pcache_line *head, Pcache_line *tail, Pcache_line item);
-void dump_settings();
+void dump_settings(); // print cache settings
 void print_stats();
 
 
