@@ -1,0 +1,10 @@
+#.clang-format
+BasedOnStyle: LLVM
+UseTab: Never
+IndentWidth: 4
+TabWidth: 4
+ColumnLimit: 0
+AccessModifierOffset: -4
+NamespaceIndentation: All
+AllowShortIfStatementsOnASingleLine: true
+SortIncludes: false 
