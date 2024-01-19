@@ -1,3 +1,4 @@
+// simulation driver
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -105,6 +106,10 @@ void parse_args(int argc, char **argv) {
 
     /* open the trace file */
     traceFile = fopen(argv[arg_index], "r");
+    if(!traceFile) {
+        printf("error opening trace file %s\n", argv[arg_index]);
+        exit(-1);
+    }
 }
 
 void play_trace(FILE *inFile) {
@@ -130,9 +135,13 @@ void play_trace(FILE *inFile) {
     flush();
 }
 
-//return 1 if is end of file, 0 otherwise
+// return 1 if is end of file, 0 otherwise
 int read_trace_element(FILE *inFile, unsigned *access_type, unsigned *addr) {
-    char c;//discard all chars
+    /*file format:
+    <access type> <hex address> <comments>
+     0 00000 data read miss (compulsory)
+     */
+    char c; // discard all chars
     int result = fscanf(inFile, "%u %x%c", access_type, addr, &c);
     while (c != '\n') {
         result = fscanf(inFile, "%c", &c);

@@ -1,4 +1,4 @@
-#!/usr/bin/csh
+#!/bin/zsh
 rm -f *.log
 code/sim -bs 16 -us 8192 -a 1 -wb -wa traces/public-block.trace > public-block1.log
 code/sim -bs 16 -us 8192 -a 1 -wb -wa traces/public-assoc.trace > public-assoc1.log
@@ -9,4 +9,4 @@ code/sim -bs 16 -us 8192 -a 1 -wb -wa traces/spice10.trace > spice10.log
 code/sim -bs 16 -us 8192 -a 1 -wb -wa traces/spice100.trace > spice100.log
 code/sim -bs 16 -us 8192 -a 1 -wb -wa traces/spice1000.trace > spice1000.log
 
-code/sim -bs 16 -us 8192 -a 1 -wb -wa traces/spice.trace > spice.log
+code/sim -bs 16 -us 8192 -a 1 -wb -wa ext_traces/spice.trace > spice.log

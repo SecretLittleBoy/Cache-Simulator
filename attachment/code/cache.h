@@ -1,3 +1,5 @@
+// cache simulator definitions
+
 #define TRUE 1
 #define FALSE 0
 
@@ -37,8 +39,11 @@ typedef struct cache_ {
     int size;              /* cache size */
     int associativity;     /* cache associativity */
     int n_sets;            /* number of cache sets */
+
+    // index = (addr & my_cache.index_mask) >> my_cache.index_mask_offset
     unsigned index_mask;   /* mask to find cache index */
     int index_mask_offset; /* number of zero bits in mask */
+    
     Pcache_line *LRU_head; /* head of LRU list for each set */
     Pcache_line *LRU_tail; /* tail of LRU list for each set */
     int *set_contents;     /* number of valid entries in set */
