@@ -69,12 +69,28 @@ static void init_single_cache(cache *c, int cache_size) {
     Dprintf("init_single_cache %s start\n", c == &c1 ? "c1" : "c2");
     c->size = cache_size;
     c->associativity = cache_assoc;
-    c->n_sets = cache_usize / (cache_assoc * cache_block_size);
+    c->n_sets = cache_size / (cache_assoc * cache_block_size);
+    Dprintf("%s->n_sets=%x\n", c == &c1 ? "c1" : "c2", c->n_sets);
     c->index_mask_offset = LOG2(cache_block_size);
-    c->index_mask = (unsigned)(c->n_sets - 1) << c->index_mask_offset;
+    Dprintf("index_mask_offset=%x\n", c->index_mask_offset);
+    c->index_mask = (c->n_sets - 1) << c->index_mask_offset;
+    Dprintf("index_mask=%x\n", c->index_mask);
+
     c->LRU_head = (Pcache_line *)malloc(sizeof(Pcache_line) * c->n_sets);
+    if (c->LRU_head == 0) {
+        Dprintf("LRU_head malloc fail");
+        exit(-1);
+    }
     c->LRU_tail = (Pcache_line *)malloc(sizeof(Pcache_line) * c->n_sets);
+    if (c->LRU_tail == 0) {
+        Dprintf("LRU_tail malloc fail\n");
+        exit(-1);
+    }
     c->set_contents = (int *)malloc(sizeof(int) * c->n_sets);
+    if (c->set_contents == 0) {
+        Dprintf("set_contents malloc fail");
+        exit(-1);
+    }
     for (int i = 0; i < c->n_sets; i++) {
         c->LRU_head[i] = NULL;
         c->LRU_tail[i] = NULL;
@@ -100,6 +116,7 @@ static void perform_load(Pcache c, unsigned addr, cache_stat *stat) {
     unsigned index = (addr & c->index_mask) >> c->index_mask_offset;
 
     int hit = FALSE;
+    Dprintf("addr=%x,tag=%x,index=%x\n", addr, tag, index);
     Pcache_line line = c->LRU_head[index];
     while (line) {
         if (line->tag == tag) {
@@ -110,9 +127,11 @@ static void perform_load(Pcache c, unsigned addr, cache_stat *stat) {
     }
 
     if (hit) {
+        Dprintf("hit\n");
         delete (&c->LRU_head[index], &c->LRU_tail[index], line);
         insert(&c->LRU_head[index], &c->LRU_tail[index], line);
     } else {
+        Dprintf("miss\n");
         stat->misses++;
         stat->demand_fetches += words_per_block;
         if (c->set_contents[index] == c->associativity) {
@@ -172,7 +191,7 @@ static void perform_store(Pcache c, unsigned addr, cache_stat *stat) {
                 delete (&c->LRU_head[index], &c->LRU_tail[index], line);
                 line->tag = tag;
                 insert(&c->LRU_head[index], &c->LRU_tail[index], line);
-                if(cache_writeback) {
+                if (cache_writeback) {
                     line->dirty = TRUE;
                 } else {
                     line->dirty = FALSE;
@@ -183,7 +202,7 @@ static void perform_store(Pcache c, unsigned addr, cache_stat *stat) {
                 line->tag = tag;
                 insert(&c->LRU_head[index], &c->LRU_tail[index], line);
                 c->set_contents[index]++;
-                if(cache_writeback) {
+                if (cache_writeback) {
                     line->dirty = TRUE;
                 } else {
                     line->dirty = FALSE;
@@ -201,12 +220,15 @@ void perform_access(unsigned addr, unsigned access_type) {
     if (cache_split) {
         switch (access_type) {
         case TRACE_DATA_LOAD:
+            Dprintf("perform_load(&c2, addr, &cache_stat_data)\n");
             perform_load(&c2, addr, &cache_stat_data);
             break;
         case TRACE_DATA_STORE:
+            Dprintf("perform_store(&c2, addr, &cache_stat_data)\n");
             perform_store(&c2, addr, &cache_stat_data);
             break;
         case TRACE_INST_LOAD:
+            Dprintf("perform_load(&c1, addr, &cache_stat_inst)\n");
             perform_load(&c1, addr, &cache_stat_inst);
             break;
         default:
@@ -215,12 +237,15 @@ void perform_access(unsigned addr, unsigned access_type) {
     } else {
         switch (access_type) {
         case TRACE_DATA_LOAD:
+            Dprintf("perform_load(&c1, addr, &cache_stat_data)\n");
             perform_load(&c1, addr, &cache_stat_data);
             break;
         case TRACE_DATA_STORE:
+            Dprintf("perform_store(&c1, addr, &cache_stat_data)\n");
             perform_store(&c1, addr, &cache_stat_data);
             break;
         case TRACE_INST_LOAD:
+            Dprintf("perform_load(&c1, addr, &cache_stat_inst)\n");
             perform_load(&c1, addr, &cache_stat_inst);
             break;
         default:

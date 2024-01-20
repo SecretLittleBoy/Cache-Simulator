@@ -4,6 +4,7 @@
 #include <string.h>
 #include "cache.h"
 #include "main.h"
+#include "debug.h"
 
 static FILE *traceFile;
 

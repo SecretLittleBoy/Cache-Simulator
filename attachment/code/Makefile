@@ -19,14 +19,17 @@ test: all
 	diff ../spice1000.log ../outputs/spice1000.out
 	echo "Passed all tests!"
 
-sim:  main.o cache.o
-	$(CC) -o sim main.o cache.o -lm #参数"-lm"代表链接到数学库。GCC编译器默认不会链接到数学库，因此在使用数学函数时（如sqrt、sin、cos等），为了避免出现链接错误，需要手动添加"-lm"参数。
+sim:  main.o cache.o debug.o
+	$(CC) -o sim main.o cache.o debug.o -lm #参数"-lm"代表链接到数学库。GCC编译器默认不会链接到数学库，因此在使用数学函数时（如sqrt、sin、cos等），为了避免出现链接错误，需要手动添加"-lm"参数。
 
 main.o:  main.c cache.h
 	$(CC) $(CFLAGS) -c main.c
 
-cache.o:  cache.c cache.h debug.h
+cache.o:  cache.c cache.h
 	$(CC) $(CFLAGS) -c cache.c
+
+debug.o:  debug.c debug.h
+	$(CC) $(CFLAGS) -c debug.c
 
 clean:
 	rm sim *.o
