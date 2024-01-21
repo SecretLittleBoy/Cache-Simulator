@@ -1,6 +1,6 @@
 #!/bin/bash
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-rm ${DIR}/*.log
+rm ${DIR}/*.working_set_characterization.log
 cnt=0
 k=0
 for f in ${DIR}/../ext_traces/*.trace

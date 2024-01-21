@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 # file_name = "1.txt"
 # file_name = "2.txt"
-file_name = "grep.cc.trace.working_set_characterization.log"
+file_name = "grep.spice.trace.impact_of_associativity.log"
 
 I_cache_size = []
 D_cache_size = []
@@ -59,5 +59,5 @@ plt.legend(loc="lower right")
 # plt.legend(loc="lower left")
 # plt.title('cc')
 # plt.title('spice')
-plt.title('tex')
+plt.title('spice')
 plt.show()
